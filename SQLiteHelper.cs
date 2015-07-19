@@ -5,7 +5,7 @@ using System.IO;
 
 namespace SQLite.Helper
 {
-    class SQLiteHelper
+    public class SQLiteHelper
     {
         // Variables
         private SQLiteConnection connection;
