@@ -18,6 +18,7 @@ using System;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.IO;
+using System.Data;
 
 namespace SQLite.Helper
 {
@@ -73,7 +74,7 @@ namespace SQLite.Helper
         /// <param name="__dropSql">SQL to drop current tables</param>
         public void CreateDb(string __sql, string __dropSql = null)
         {
-            // Check if accored any error
+            // Check if occurred any error
             if (generalError)
             {
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -99,7 +100,7 @@ namespace SQLite.Helper
                 cmd.ExecuteNonQuery();
 
                 // Close the connection and return the value
-                connection.Close();
+                connection.Dispose();
                 return;
             }
             catch (SQLiteException error)
@@ -117,7 +118,7 @@ namespace SQLite.Helper
         public void Write(string __sql)
         {
 
-            // Check if accored any error
+            // Check if occurred any error
             if (generalError)
             {
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -136,7 +137,7 @@ namespace SQLite.Helper
                 cmd.ExecuteNonQuery();
 
                 // Close the connection and return the value
-                connection.Close();
+                connection.Dispose();
                 return;
             }
             catch (SQLiteException error)
@@ -154,7 +155,7 @@ namespace SQLite.Helper
         /// <returns>Returns and integer</returns>
         public int GetInt(string __sql)
         {
-            // Check if accored any error
+            // Check if occurred any error
             if (generalError)
             {
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -173,7 +174,7 @@ namespace SQLite.Helper
                 int result = Convert.ToInt32(cmd.ExecuteScalar());
 
                 // Close the connection and return the value
-                connection.Close();
+                connection.Dispose();
                 return result;
             }
             catch (SQLiteException error)
@@ -189,10 +190,10 @@ namespace SQLite.Helper
         /// Get a string from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
-        /// <returns></returns>
+        /// <returns>Returns a string</returns>
         public string GetString(string __sql)
         {
-            // Check if accored any error
+            // Check if occurred any error
             if (generalError)
             {
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -211,7 +212,7 @@ namespace SQLite.Helper
                 string result = Convert.ToString(cmd.ExecuteScalar());
 
                 // Close the connection and return the value
-                connection.Close();
+                connection.Dispose();
                 return result;
             }
             catch (SQLiteException error)
@@ -220,6 +221,39 @@ namespace SQLite.Helper
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
                 return "";
+            }
+        }
+
+        /// <summary>
+        /// Gets table values inside a dataset
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <param name="__table">Name of the table</param>
+        /// <returns>Returns a dataset</returns>
+        public DataSet GetData(string __sql, string __table)
+        {
+            DataSet data = new DataSet();
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return data;
+            }
+
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(__sql, connection);
+                adapter.Fill(data, __table);
+                adapter.Dispose();
+                connection.Dispose();
+                return data;
+            }
+            catch (SQLiteException error)
+            {
+                // Shows the error message
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+                return data;
             }
         }
     }
