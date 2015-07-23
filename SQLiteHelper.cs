@@ -143,13 +143,13 @@ namespace SQLite.Helper
         }
 
         /// <summary>
-        /// Get a byte value from the database
+        /// Get a signed byte value from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
-        /// <returns>Returns and byte</returns>
-        public byte GetByte(string __sql)
+        /// <returns>signed byte</returns>
+        public sbyte GetSignedByte(string __sql)
         {
-            byte result = 0;
+            sbyte result = 0;
 
             // Check if occurred any error
             if (generalError)
@@ -164,7 +164,7 @@ namespace SQLite.Helper
                 connection.Open();
 
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
-                result = Convert.ToByte(cmd.ExecuteScalar());
+                result = Convert.ToSByte(cmd.ExecuteScalar());
             }
             catch (SQLiteException error)
             {
@@ -183,7 +183,7 @@ namespace SQLite.Helper
         /// Get a integer value from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
-        /// <returns>Returns and integer</returns>
+        /// <returns>integer</returns>
         public int GetInt(string __sql)
         {
             int result = 0;
@@ -220,7 +220,7 @@ namespace SQLite.Helper
         /// Get a string from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
-        /// <returns>Returns a string</returns>
+        /// <returns>string</returns>
         public string GetString(string __sql)
         {
             string result = "";
@@ -258,7 +258,7 @@ namespace SQLite.Helper
         /// </summary>
         /// <param name="__sql">SQL statement</param>
         /// <param name="__table">Name of the table</param>
-        /// <returns>Returns a dataset</returns>
+        /// <returns>dataset</returns>
         public DataSet GetData(string __sql, string __table)
         {
             DataSet data = new DataSet();
