@@ -47,8 +47,8 @@ namespace SQLite.Helper
                 generalError = true;
             }
 
-            string connectionStr = __connectionStr;
             // Generates the connections string
+            string connectionStr = __connectionStr;
             if (__connectionStr == null)
             {
                 if (__create)
@@ -80,12 +80,10 @@ namespace SQLite.Helper
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-
-            // Sets the sql error to false
+            
             sqlError = false;
             try
             {
-                // Open a connection to the database
                 connection.Open();
 
                 // Drop the current values
@@ -94,20 +92,18 @@ namespace SQLite.Helper
                     SQLiteCommand cmdDrop = new SQLiteCommand(__dropSql, connection);
                     cmdDrop.ExecuteNonQuery();
                 }
-
-                // Creates the database
+                
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 cmd.ExecuteNonQuery();
-
-                // Close the connection and return the value
-                connection.Dispose();
-                return;
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
             }
         }
 
@@ -129,22 +125,18 @@ namespace SQLite.Helper
             sqlError = false;
             try
             {
-                // Open a connection to the database
                 connection.Open();
-
-                // Get the values
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 cmd.ExecuteNonQuery();
-
-                // Close the connection and return the value
-                connection.Dispose();
-                return;
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
             }
         }
 
@@ -155,35 +147,34 @@ namespace SQLite.Helper
         /// <returns>Returns and integer</returns>
         public int GetInt(string __sql)
         {
+            int result = 0;
+
             // Check if occurred any error
             if (generalError)
             {
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
-
-            // Sets the sql error to false
+            
             sqlError = false;
             try
             {
-                // Open a connection to the database
                 connection.Open();
-
-                // Get the values
+                
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
-                int result = Convert.ToInt32(cmd.ExecuteScalar());
-
-                // Close the connection and return the value
-                connection.Dispose();
-                return result;
+                result = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
-                return 0;
             }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -193,6 +184,7 @@ namespace SQLite.Helper
         /// <returns>Returns a string</returns>
         public string GetString(string __sql)
         {
+            string result = "";
             // Check if occurred any error
             if (generalError)
             {
@@ -200,28 +192,26 @@ namespace SQLite.Helper
                 return "";
             }
 
-            // Sets the sql error to false
+
             sqlError = false;
             try
             {
-                // Open a connection to the database
                 connection.Open();
-
-                // Get the values
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
-                string result = Convert.ToString(cmd.ExecuteScalar());
-
-                // Close the connection and return the value
-                connection.Dispose();
-                return result;
+                result = Convert.ToString(cmd.ExecuteScalar());
             }
             catch (SQLiteException error)
             {
                 // Shows the error message
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
-                return "";
             }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -233,6 +223,7 @@ namespace SQLite.Helper
         public DataSet GetData(string __sql, string __table)
         {
             DataSet data = new DataSet();
+
             // Check if occurred any error
             if (generalError)
             {
@@ -246,15 +237,19 @@ namespace SQLite.Helper
                 adapter.Fill(data, __table);
                 adapter.Dispose();
                 connection.Dispose();
-                return data;
             }
             catch (SQLiteException error)
             {
                 // Shows the error message
                 MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sqlError = true;
-                return data;
             }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return data;
         }
     }
 }
