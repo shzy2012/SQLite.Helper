@@ -40,6 +40,8 @@ namespace SQLite.Helper
         /// <param name="__connectionStr">Custom connection string</param>
         public SQLiteHelper(string __database, bool __readOnly = true, bool __create = false, string __connectionStr = null)
         {
+            generalError = false;
+
             // Checks if the database exists
             if (!File.Exists(__database) && !__create)
             {
