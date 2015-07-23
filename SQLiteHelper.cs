@@ -26,8 +26,8 @@ namespace SQLite.Helper
     {
         // Variables
         private SQLiteConnection connection;
-        public bool generalError = false; // If and general error has occurred
-        public bool sqlError = false; // If and sql error has occured
+        public bool generalError { get; private set; } // If and general error has occurred
+        public bool sqlError { get; private set; } // If and sql error has occured
 
         /// <summary>
         /// Constructor
@@ -47,9 +47,9 @@ namespace SQLite.Helper
                 generalError = true;
             }
 
-            // Generates the connections string
+            // Generates the connection string
             string connectionStr = __connectionStr;
-            if (__connectionStr == null)
+            if (connectionStr == null)
             {
                 if (__create)
                     connectionStr = "Data Source=" + __database + "; Version=3";
@@ -80,7 +80,7 @@ namespace SQLite.Helper
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            
+
             sqlError = false;
             try
             {
@@ -92,7 +92,7 @@ namespace SQLite.Helper
                     SQLiteCommand cmdDrop = new SQLiteCommand(__dropSql, connection);
                     cmdDrop.ExecuteNonQuery();
                 }
-                
+
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -155,12 +155,12 @@ namespace SQLite.Helper
                 MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
-            
+
             sqlError = false;
             try
             {
                 connection.Open();
-                
+
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 result = Convert.ToInt32(cmd.ExecuteScalar());
             }
@@ -231,6 +231,7 @@ namespace SQLite.Helper
                 return data;
             }
 
+            sqlError = false;
             try
             {
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(__sql, connection);
