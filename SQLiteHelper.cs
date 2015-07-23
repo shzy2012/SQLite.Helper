@@ -143,6 +143,43 @@ namespace SQLite.Helper
         }
 
         /// <summary>
+        /// Get a byte value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Byte</returns>
+        public byte GetByte(string __sql)
+        {
+            byte result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToByte(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Get a signed byte value from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
@@ -165,6 +202,80 @@ namespace SQLite.Helper
 
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 result = Convert.ToSByte(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a short value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Short</returns>
+        public short GetShort(string __sql)
+        {
+            short result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToInt16(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a usigned short value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Unsigned short</returns>
+        public ushort GetUnsignedShort(string __sql)
+        {
+            ushort result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToUInt16(cmd.ExecuteScalar());
             }
             catch (SQLiteException error)
             {
@@ -217,6 +328,228 @@ namespace SQLite.Helper
         }
 
         /// <summary>
+        /// Get a unsigned integer value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Unsigned integer</returns>
+        public uint GetUnsignedInt(string __sql)
+        {
+            uint result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToUInt32(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a long value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Long</returns>
+        public long GetLong(string __sql)
+        {
+            long result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToInt64(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a unsigned long value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Unsigned long</returns>
+        public ulong GetUnsignedLong(string __sql)
+        {
+            ulong result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToUInt64(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a float value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Float</returns>
+        public float GetFloat(string __sql)
+        {
+            float result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToSingle(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a double value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Double</returns>
+        public double GetDouble(string __sql)
+        {
+            double result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToDouble(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a decimal value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Decimal</returns>
+        public decimal GetDecimal(string __sql)
+        {
+            decimal result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToDecimal(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Get a string from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
@@ -238,6 +571,81 @@ namespace SQLite.Helper
                 connection.Open();
                 SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
                 result = Convert.ToString(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                // Shows the error message
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a boolean from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Bool</returns>
+        public bool GetBool(string __sql)
+        {
+            bool result = false;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return result;
+            }
+
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToBoolean(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                // Shows the error message
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a DateTime value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>DateTime</returns>
+        public DateTime GetDateTime(string __sql)
+        {
+            DateTime result = DateTime.Today;
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return result;
+            }
+
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToDateTime(cmd.ExecuteScalar());
             }
             catch (SQLiteException error)
             {
