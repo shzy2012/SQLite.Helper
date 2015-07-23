@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License
 along with SQLite.Helper.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-using System.Windows.Forms;
 using System.Data.SQLite;
 using System.IO;
 using System.Data;
@@ -28,6 +27,9 @@ namespace SQLite.Helper
         private SQLiteConnection connection;
         public bool generalError { get; private set; } // If and general error has occurred
         public bool sqlError { get; private set; } // If and sql error has occured
+        public string sqlErrorMessage { get; private set; } // Error message
+        public int sqlErrorNum { get; private set; } // SQLite error number
+        public bool dbDontExists { get; private set; } // If the database exists
 
         /// <summary>
         /// Constructor
@@ -41,11 +43,15 @@ namespace SQLite.Helper
         public SQLiteHelper(string __database, bool __readOnly = true, bool __create = false, string __connectionStr = null)
         {
             generalError = false;
+            sqlError = false;
+            sqlErrorMessage = "";
+            sqlErrorNum = 0;
+            dbDontExists = false;
 
             // Checks if the database exists
             if (!File.Exists(__database) && !__create)
             {
-                MessageBox.Show("Database" + __database + "doesn't exists", "Database not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dbDontExists = true;
                 generalError = true;
             }
 
@@ -79,7 +85,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -100,7 +105,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -110,16 +116,16 @@ namespace SQLite.Helper
         }
 
         /// <summary>
-        /// Writes something on the database
+        /// Sends a SQL query that doesn't return any value
+        /// It can also be used to create a table, but it's recomended to use CreateDb instead
         /// </summary>
         /// <param name="__sql">SQL statement</param>
-        public void Write(string __sql)
+        public void SendQuery(string __sql)
         {
 
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -133,7 +139,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -154,7 +161,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -168,7 +174,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -191,7 +198,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -205,7 +211,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -228,7 +235,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -242,7 +248,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -265,7 +272,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -279,7 +285,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -302,7 +309,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -316,7 +322,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -339,7 +346,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -353,7 +359,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -376,7 +383,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -390,7 +396,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -413,7 +420,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -427,7 +433,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -450,7 +457,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -464,7 +470,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -487,7 +494,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -501,7 +507,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -524,7 +531,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return 0;
             }
 
@@ -538,7 +544,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -560,7 +567,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return "";
             }
 
@@ -574,8 +580,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -598,7 +604,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return result;
             }
 
@@ -612,8 +617,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -635,7 +640,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return result;
             }
 
@@ -649,8 +653,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
@@ -674,7 +678,6 @@ namespace SQLite.Helper
             // Check if occurred any error
             if (generalError)
             {
-                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return data;
             }
 
@@ -688,8 +691,8 @@ namespace SQLite.Helper
             }
             catch (SQLiteException error)
             {
-                // Shows the error message
-                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlErrorMessage = error.Message.ToString();
+                sqlErrorNum = error.ErrorCode;
                 sqlError = true;
             }
             finally
