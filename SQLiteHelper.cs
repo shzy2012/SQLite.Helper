@@ -143,6 +143,43 @@ namespace SQLite.Helper
         }
 
         /// <summary>
+        /// Get a byte value from the database
+        /// </summary>
+        /// <param name="__sql">SQL statement</param>
+        /// <returns>Returns and byte</returns>
+        public byte GetByte(string __sql)
+        {
+            byte result = 0;
+
+            // Check if occurred any error
+            if (generalError)
+            {
+                MessageBox.Show("An error has occurred in the past", "Can't do that", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return 0;
+            }
+
+            sqlError = false;
+            try
+            {
+                connection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(__sql, connection);
+                result = Convert.ToByte(cmd.ExecuteScalar());
+            }
+            catch (SQLiteException error)
+            {
+                MessageBox.Show("SQLite Error: " + error.Message, "SQLite Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                sqlError = true;
+            }
+            finally
+            {
+                connection.Dispose();
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Get a integer value from the database
         /// </summary>
         /// <param name="__sql">SQL statement</param>
