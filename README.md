@@ -19,7 +19,8 @@ where C:\database.db is the path to your database.
 
 Then just call the method that you need, like get a string
 ```C#
-string value = sqlite.GetString("SELECT `something` FROM `thattable` WHERE `otherthing` = 10");
+string StrValue = Convert.ToString(sqlite.Get("SELECT `something` FROM `thattable` WHERE `otherthing` = 10"));
+int IntValue = Convert.ToInt32(sqlite.Get("SELECT `somethingelse` FROM `anothertable` WHERE `otherthing` = 10"));
 ```
 
 You can check more information on the wiki.
