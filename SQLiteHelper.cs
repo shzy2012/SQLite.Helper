@@ -49,17 +49,23 @@ namespace SQLite.Helper
         /// SQLite error number 
         /// </summary>
         public int SqlErrorNum { get; private set; }
+
+        /// <summary>
+        /// Doesn't create a connection
+        /// </summary>
+        public SQLiteHelper()
+        {
+            GeneralError = false;
+            SqlError = false;
+            SqlErrorMessage = "";
+            SqlErrorNum = 0;
+        }
         
         /// <summary>
-        /// Constructor
-        /// Checks if the database exists (if isn't creating)
-        /// Creates the connnection to the database
+        /// Checks if the database exists and creates the connnection to the database
         /// </summary>
         /// <param name="__database">Database Path</param>
-        /// <param name="__readOnly">Open database in read only (Ignored when creating)</param>
-        /// <param name="__create">Create new database</param>
-        /// <param name="__connectionStr">Custom connection string</param>
-        public SQLiteHelper(string __Database, bool __ReadOnly = true, bool __Create = false, string __ConnectionStr = null)
+        public SQLiteHelper(string __Database)
         {
             GeneralError = false;
             SqlError = false;
@@ -67,29 +73,15 @@ namespace SQLite.Helper
             SqlErrorNum = 0;
 
             // Checks if the database exists
-            if (!File.Exists(__Database) && !__Create)
+            if (!File.Exists(__Database))
             {
                 GeneralError = true;
             }
-
-            // Generates the connection string
-            string connectionStr = __ConnectionStr;
-            if (connectionStr == null)
+            else
             {
-                if (__Create)
-                    connectionStr = "Data Source=" + __Database + "; Version=3";
-                else
-                {
-                    connectionStr = "Data Source=" + __Database + "; Version=3; FailIfMissing=True";
-
-                    // If the connection is read only, appends the read only argument
-                    if (__ReadOnly)
-                        connectionStr += "; ReadOnly = True";
-                }
+                // Creates the connection
+                Connection = new SQLiteConnection("Data Source=" + __Database + "; Version=3");
             }
-
-            // Creates the connection
-            Connection = new SQLiteConnection(connectionStr);
         }
 
         /// <summary>
