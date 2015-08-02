@@ -64,7 +64,7 @@ namespace SQLite.Helper
         /// <summary>
         /// Checks if the database exists and creates the connnection to the database
         /// </summary>
-        /// <param name="__database">Database Path</param>
+        /// <param name="__Database">Database Path</param>
         public SQLiteHelper(string __Database)
         {
             GeneralError = false;
@@ -87,9 +87,9 @@ namespace SQLite.Helper
         /// <summary>
         /// Creates a database
         /// </summary>
-        /// <param name="__sql">SQL statement</param>
-        /// <param name="__dropSql">SQL to drop current tables</param>
-        public void CreateDb(string __Sql, string __dropSql = null)
+        /// <param name="__Sql">SQL statement</param>
+        /// <param name="__DropSql">SQL to drop current tables</param>
+        public void CreateDb(string __Sql, string __DropSql = null)
         {
             // Check if occurred any error
             if (GeneralError)
@@ -103,9 +103,9 @@ namespace SQLite.Helper
                 Connection.Open();
 
                 // Drop the current values
-                if (__dropSql != null)
+                if (__DropSql != null)
                 {
-                    SqlCmd = new SQLiteCommand(__dropSql, Connection);
+                    SqlCmd = new SQLiteCommand(__DropSql, Connection);
                     SqlCmd.ExecuteNonQuery();
                     SqlCmd.Dispose();
                 }
@@ -131,7 +131,7 @@ namespace SQLite.Helper
         /// Sends a SQL query that doesn't return any value
         /// It can also be used to create a table, but it's recomended to use CreateDb instead
         /// </summary>
-        /// <param name="__sql">SQL statement</param>
+        /// <param name="__Sql">SQL statement</param>
         public void SendQuery(string __Sql)
         {
 
